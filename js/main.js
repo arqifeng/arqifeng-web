@@ -46,7 +46,7 @@ if (contactForm) {
       formData.get("mensaje") || "",
     ].join("\n");
 
-    window.location.href = `mailto:arqifeng@gmail.com?subject=${encodeURIComponent(
+    window.location.href = `mailto:contacto@arqifeng.cl?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
 
