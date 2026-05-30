@@ -3,12 +3,12 @@
   "short_name": "ArqiFeng",
   "icons": [
     {
-      "src": "img/favicon/favicon-192x192.png",
+      "src": "/img/imagenes/favicon/favicon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "img/favicon/favicon-512x512.png",
+      "src": "/img/imagenes/favicon/favicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
