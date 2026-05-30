@@ -1002,6 +1002,14 @@ h3 {
   color: #fff;
 }
 
+a.footer-item[href^="mailto:"] {
+  transition: color 180ms ease;
+}
+
+a.footer-item[href^="mailto:"]:hover {
+  color: var(--sand);
+}
+
 .footer-icon {
   width: 34px;
   height: 34px;
