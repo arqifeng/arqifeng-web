@@ -61,9 +61,24 @@ function createFormFeedback() {
   const icon = root.querySelector(".form-feedback__icon");
   const title = root.querySelector(".form-feedback__title");
   const message = root.querySelector(".form-feedback__message");
+  const actionBtn = root.querySelector(".form-feedback__action");
+  const closeBtn = root.querySelector(".form-feedback__close");
   let hideTimer = null;
+  let isLoading = false;
+
+  const open = () => {
+    root.hidden = false;
+    requestAnimationFrame(() => {
+      root.classList.add("is-visible");
+    });
+    document.body.classList.add("form-feedback-open");
+  };
 
   const hide = () => {
+    if (isLoading) {
+      return;
+    }
+
     if (hideTimer) {
       clearTimeout(hideTimer);
       hideTimer = null;
@@ -80,24 +95,42 @@ function createFormFeedback() {
   };
 
   const show = ({ type, titleText, messageText, autoHideMs = 5500 }) => {
-    root.classList.remove("form-feedback--success", "form-feedback--error");
-    root.classList.add(type === "success" ? "form-feedback--success" : "form-feedback--error");
+    root.classList.remove(
+      "form-feedback--success",
+      "form-feedback--error",
+      "form-feedback--loading"
+    );
 
-    icon.textContent = type === "success" ? "✓" : "!";
-    title.textContent = titleText;
-    message.textContent = messageText;
+    isLoading = type === "loading";
 
-    root.hidden = false;
-    requestAnimationFrame(() => {
-      root.classList.add("is-visible");
-    });
-    document.body.classList.add("form-feedback-open");
+    if (type === "loading") {
+      root.classList.add("form-feedback--loading");
+      icon.textContent = "";
+      title.textContent = titleText;
+      message.textContent = messageText;
+      actionBtn.hidden = true;
+      closeBtn.hidden = true;
+    } else {
+      root.classList.add(
+        type === "success" ? "form-feedback--success" : "form-feedback--error"
+      );
+      icon.textContent = type === "success" ? "✓" : "!";
+      title.textContent = titleText;
+      message.textContent = messageText;
+      actionBtn.hidden = false;
+      closeBtn.hidden = false;
+    }
+
+    if (root.hidden || !root.classList.contains("is-visible")) {
+      open();
+    }
 
     if (hideTimer) {
       clearTimeout(hideTimer);
+      hideTimer = null;
     }
 
-    if (autoHideMs > 0) {
+    if (!isLoading && autoHideMs > 0) {
       hideTimer = window.setTimeout(hide, autoHideMs);
     }
   };
@@ -135,11 +168,15 @@ if (contactForm) {
       return;
     }
 
-    const originalText = submitBtn?.textContent;
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = "Enviando...";
     }
+
+    formFeedback.show({
+      type: "loading",
+      titleText: "Enviando consulta",
+      messageText: "Estamos enviando tu mensaje. Un momento, por favor.",
+    });
 
     emailjs
       .sendForm(emailConfig.serviceId, emailConfig.templateId, contactForm)
@@ -159,14 +196,13 @@ if (contactForm) {
           type: "error",
           titleText: "No se pudo enviar",
           messageText:
-            "No pudimos enviar el mensaje. Intenta de nuevo o escríbenos directamente.",
+            "No pudimos enviar el mensaje. Intenta de nuevo más tarde o escríbenos directamente al correo contacto@arqifeng.cl.",
           autoHideMs: 4000,
         });
       })
       .finally(() => {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = originalText || "Enviar consulta";
         }
       });
   });

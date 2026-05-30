@@ -1970,6 +1970,23 @@ textarea {
   color: #8b3a3a;
 }
 
+.form-feedback--loading .form-feedback__icon {
+  background: rgba(94, 101, 66, 0.14);
+  border: 3px solid rgba(94, 101, 66, 0.2);
+  border-top-color: var(--olive-2);
+  animation: form-feedback-spin 0.75s linear infinite;
+}
+
+.form-feedback--loading .form-feedback__message {
+  margin-bottom: 0;
+}
+
+@keyframes form-feedback-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .form-feedback__title {
   margin: 0 0 10px;
   font-family: var(--serif);
