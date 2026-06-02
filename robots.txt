@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arqifeng.cl/sitemap.xml
